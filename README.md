@@ -4,6 +4,13 @@ Application Security - Lab 1
 A simple web application that allow users to upload a PNG, JPG, or GIF image with a caption. Visitors to the site can view uploaded images. A simple, secure login and signup system with PHP, MySQL and jQuery (AJAX) using Bootstrap 3 for the form design.
 
 ## Installation
+
+### Dependancies
+
+> 1) Apache - 2.4.18
+> 2) PHP - 5.6.23
+> 3) MySQL - 14.14
+
 ### Download ajk665_webapp.tar.gz to your Document Root according to your Apache Setup.
     $ cd <enter path to your Document Root>
     $ tar -xvf ajk665_webapp.tar.gz
