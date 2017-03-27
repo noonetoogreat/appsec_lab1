@@ -51,48 +51,55 @@ if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && $_SERVER['HTTP_X_REQU
                 //Pull username, generate new ID and hash password
                 $newid = uniqid(rand(), false);
                 $newuser = sanitize($_POST['newuser']);
-                $newpw = password_hash(sanitize($_POST['password1']), PASSWORD_DEFAULT);
-                $pw1 = sanitize($_POST['password1']);
-                $pw2 = sanitize($_POST['password2']);
-                $newemail = sanitize($_POST['email']);
 
-                //Validation rules
-                if ($pw1 != $pw2) {
+                if (strlen($newuser) < 63) {
+                    $newpw = password_hash(sanitize($_POST['password1']), PASSWORD_DEFAULT);
+                    $pw1 = sanitize($_POST['password1']);
+                    $pw2 = sanitize($_POST['password2']);
+                    $newemail = sanitize($_POST['email']);
+               
 
-                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password fields must match</div><div id="returnVal" style="display:none;">false</div>';
+                    //Validation rules
+                    if ($pw1 != $pw2) {
 
-                } elseif (strlen($pw1) < 4) {
+                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password fields must match</div><div id="returnVal" style="display:none;">false</div>';
 
-                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password must be at least 4 characters</div><div id="returnVal" style="display:none;">false</div>';
+                    } elseif (strlen($pw1) < 4) {
 
-                } elseif (!filter_var($newemail, FILTER_VALIDATE_EMAIL) == true) {
+                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password must be at least 4 characters</div><div id="returnVal" style="display:none;">false</div>';
 
-                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Must provide a valid email address</div><div id="returnVal" style="display:none;">false</div>';
+                    } elseif (!filter_var($newemail, FILTER_VALIDATE_EMAIL) == true) {
 
-                } else {
-                    //Validation passed
-                    if (isset($_POST['newuser']) && !empty(str_replace(' ', '', $_POST['newuser'])) && isset($_POST['password1']) && !empty(str_replace(' ', '', $_POST['password1']))) {
+                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Must provide a valid email address</div><div id="returnVal" style="display:none;">false</div>';
 
-                        //Tries inserting into database and add response to variable
-
-                        $a = new NewUserForm;
-
-                        $response = $a->createUser($newuser, $newid, $newemail, $newpw);
-
-                        //Success
-                        if ($response == 'true') {
-
-                            echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'. $signupthanks .'</div><div id="returnVal" style="display:none;">true</div>';
-
-                        } else {
-                            //Failure
-                            mySqlErrors($response);
-
-                        }
                     } else {
-                        //Validation error from empty form variables
-                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>There has been an error in processing your form. Please try again.</div><div id="returnVal" style="display:none;">false</div>';
+                        //Validation passed
+                        if (isset($_POST['newuser']) && !empty(str_replace(' ', '', $_POST['newuser'])) && isset($_POST['password1']) && !empty(str_replace(' ', '', $_POST['password1']))) {
+
+                            //Tries inserting into database and add response to variable
+
+                            $a = new NewUserForm;
+
+                            $response = $a->createUser($newuser, $newid, $newemail, $newpw);
+
+                            //Success
+                            if ($response == 'true') {
+
+                                echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'. $signupthanks .'</div><div id="returnVal" style="display:none;">true</div>';
+
+                            } else {
+                                //Failure
+                                mySqlErrors($response);
+
+                            }
+                        } else {
+                            //Validation error from empty form variables
+                            echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>There has been an error in processing your form. Please try again.</div><div id="returnVal" style="display:none;">false</div>';
+                        }
                     }
+                }
+                else {
+                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>There has been an error in processing your form. Please try again.</div><div id="returnVal" style="display:none;">false</div>';
                 }
             }
             else {
