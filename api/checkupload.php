@@ -98,27 +98,7 @@ if (array_key_exists('token', $_POST)) {
                     $image_status = true;
             }
 
-            // Check 3 - Checking the first 100 bytes of the uploaded file for any bytes in the following range: ASCII 0-8, 12-31
-            /*
-            $fp = fopen($photo['tmp_name'], 'r');
-            $data = fread($fp, 100);
-            echo $data;
-            for( $i = 0; $i <= strlen($data); $i++ ) {
-                $char = ord(substr( $data, $i, 1 ));
-                if (($char > 0 && $char <= 8) || ($char >= 12 && $char <= 31))
-                {
-                    echo $char; 
-                    echo ',';
-                    $image_status = true;
-                }
-            }
-            */
-            
-            // Check 4 - Check for magic numbers in the header
-            // To-be implemented
-
             // Adding file to Database
-
             if (!($request_status || $image_status)) {
                 $file_name          = strtolower(sanitize($photo['name']));
 
